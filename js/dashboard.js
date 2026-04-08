@@ -2,9 +2,10 @@
    MODE CONFIG
 ══════════════════════════════════════════════ */
 const MODES = {
-  gym:    { label: 'Fitness Center', eventsTitle: "Today's Schedule", showCalendar: true  },
-  dining: { label: 'Dining Hall',    eventsTitle: 'Meal Times',        showCalendar: false },
-  campus: { label: 'Campus',         eventsTitle: "Today's Events",    showCalendar: false },
+  gym:           { label: 'Fitness Center', eventsTitle: "Today's Schedule",  showCalendar: true  },
+  dining:        { label: 'Dining Hall',    eventsTitle: 'Meal Times',         showCalendar: false },
+  campus:        { label: 'Campus',         eventsTitle: "Today's Events",     showCalendar: false },
+  entertainment: { label: 'Entertainment',  eventsTitle: "Tonight's Shows",    showCalendar: true  },
 };
 const DEFAULT_MODE = 'campus';
 
@@ -293,10 +294,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     fetch(`data/${modeName}/backgrounds.json`).then(r => r.json()).catch(() => []),
   ]);
 
+  /* Apply tag filter if ?tag= is in URL */
+  const tagFilter = params.get('tag');
+  const filteredEvents = tagFilter
+    ? eventsData.filter(e => e.tags && e.tags.includes(tagFilter))
+    : eventsData;
+  const filteredStrip = tagFilter
+    ? stripData.filter(s => s.tags && s.tags.includes(tagFilter))
+    : stripData;
+
   /* Populate events list in expanded widget */
   const eventsList = document.getElementById('events-list');
-  if (eventsList && eventsData.length) {
-    eventsList.innerHTML = eventsData.map(ev => `
+  if (eventsList && filteredEvents.length) {
+    eventsList.innerHTML = filteredEvents.map(ev => `
       <div class="ev-row">
         <div class="col-left"><div class="dow">${ev.dow}</div><div class="time">${ev.time}</div></div>
         <div class="col-right"><div class="date">${ev.date}</div><div class="name">${ev.name}</div><div class="meta">${ev.meta || ''}</div></div>
@@ -460,7 +470,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         all.forEach(ev => {
           const evEl = document.createElement('div');
           evEl.className = 'cal-event';
-          evEl.textContent = ev.localName || ev.title;
+          if (ev.image) {
+            evEl.innerHTML = `<img class="cal-event-img" src="${ev.image}" alt="${ev.name||ev.localName||''}"><div>${ev.name||ev.localName||''}</div>`;
+          } else {
+            evEl.textContent = ev.localName || ev.title || ev.name;
+          }
           dayEl.appendChild(evEl);
         });
       }
@@ -479,5 +493,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   }, { passive: false });
 
   /* Commercial strip */
-  renderCommercialStrip(stripData);
+  renderCommercialStrip(filteredStrip);
 });

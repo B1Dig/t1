@@ -1,7 +1,7 @@
 [
-  { "id": "1", "icon": "🏋️", "text": "Fitness Center — Open 6AM to 10PM", "tag": "HOURS" },
-  { "id": "2", "icon": "🧘", "text": "Yoga Class — Mon & Wed 7:00 AM", "tag": "CLASS" },
-  { "id": "3", "icon": "🏃", "text": "Cardio Bootcamp — Tue & Thu 6:30 PM", "tag": "CLASS" },
-  { "id": "4", "icon": "💪", "text": "Personal Training Available — Book at Front Desk", "tag": "INFO" },
-  { "id": "5", "icon": "🚿", "text": "Locker Rooms & Showers Available", "tag": "INFO" }
+  { "id": "1", "icon": "🏋️", "text": "Fitness Center — Open 6AM to 10PM", "tags": ["info"] },
+  { "id": "2", "icon": "🧘", "text": "Yoga Class — Mon & Wed 7:00 AM", "tags": ["yoga", "class"] },
+  { "id": "3", "icon": "🏃", "text": "Cardio Bootcamp — Tue & Thu 6:30 PM", "tags": ["cardio", "class"] },
+  { "id": "4", "icon": "💪", "text": "Personal Training Available — Book at Front Desk", "tags": ["info"] },
+  { "id": "5", "icon": "🚿", "text": "Locker Rooms & Showers Available", "tags": ["info"] }
 ]

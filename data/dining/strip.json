@@ -1,7 +1,7 @@
 [
-  { "id": "1", "icon": "🍳", "text": "Breakfast — 7:00 AM to 10:30 AM", "tag": "HOURS" },
-  { "id": "2", "icon": "🥗", "text": "Lunch — 11:00 AM to 2:30 PM", "tag": "HOURS" },
-  { "id": "3", "icon": "🍽️", "text": "Dinner — 5:00 PM to 8:00 PM", "tag": "HOURS" },
-  { "id": "4", "icon": "☕", "text": "Coffee Bar Open All Day", "tag": "INFO" },
-  { "id": "5", "icon": "🥤", "text": "Smoothie Station Available at Lunch", "tag": "INFO" }
+  { "id": "1", "icon": "🍳", "text": "Breakfast — 7:00 AM to 10:30 AM", "tags": ["hours", "breakfast"] },
+  { "id": "2", "icon": "🥗", "text": "Lunch — 11:00 AM to 2:30 PM", "tags": ["hours", "lunch"] },
+  { "id": "3", "icon": "🍽️", "text": "Dinner — 5:00 PM to 8:00 PM", "tags": ["hours", "dinner"] },
+  { "id": "4", "icon": "☕", "text": "Coffee Bar Open All Day", "tags": ["info"] },
+  { "id": "5", "icon": "🥤", "text": "Smoothie Station Available at Lunch", "tags": ["info", "lunch"] }
 ]

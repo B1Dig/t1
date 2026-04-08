@@ -1,7 +1,7 @@
 [
-  { "id": "1", "icon": "🎓", "text": "Welcome to UMass Boston", "tag": "NEWS" },
-  { "id": "2", "icon": "📅", "text": "Spring 2025 Registration Now Open", "tag": "REGISTER" },
-  { "id": "3", "icon": "🏆", "text": "UMass Boston Athletics", "tag": "SPORTS" },
-  { "id": "4", "icon": "📢", "text": "Campus Events Every Week", "tag": "EVENTS" },
-  { "id": "5", "icon": "🌐", "text": "Online & Hybrid Courses Available", "tag": "ONLINE" }
+  { "id": "1", "icon": "🎓", "text": "Welcome to UMass Boston", "tags": ["general"] },
+  { "id": "2", "icon": "📅", "text": "Spring 2025 Registration Now Open", "tags": ["academic", "register"] },
+  { "id": "3", "icon": "🏆", "text": "UMass Boston Athletics", "tags": ["sports"] },
+  { "id": "4", "icon": "📢", "text": "Campus Events Every Week", "tags": ["general", "events"] },
+  { "id": "5", "icon": "🌐", "text": "Online & Hybrid Courses Available", "tags": ["academic", "online"] }
 ]

@@ -1,7 +1,7 @@
 [
-  { "dow": "Mon.", "time": "6:00 AM", "date": "Today", "name": "Morning Yoga", "meta": "Studio A" },
-  { "dow": "Mon.", "time": "8:00 AM", "date": "Today", "name": "Spinning Class", "meta": "Cycling Room" },
-  { "dow": "Mon.", "time": "12:00 PM", "date": "Today", "name": "Abs & Core", "meta": "Studio B" },
-  { "dow": "Tue.", "time": "6:30 PM", "date": "Tomorrow", "name": "Cardio Bootcamp", "meta": "Main Floor" },
-  { "dow": "Wed.", "time": "7:00 AM", "date": "Apr 9", "name": "Morning Yoga", "meta": "Studio A" }
+  { "dow": "Mon.", "time": "6:00 AM", "date": "Today", "name": "Morning Yoga", "meta": "Studio A", "tags": ["yoga", "morning"] },
+  { "dow": "Mon.", "time": "8:00 AM", "date": "Today", "name": "Spinning Class", "meta": "Cycling Room", "tags": ["cycling", "cardio"] },
+  { "dow": "Mon.", "time": "12:00 PM", "date": "Today", "name": "Abs & Core", "meta": "Studio B", "tags": ["strength", "core"] },
+  { "dow": "Tue.", "time": "6:30 PM", "date": "Tomorrow", "name": "Cardio Bootcamp", "meta": "Main Floor", "tags": ["cardio", "bootcamp"] },
+  { "dow": "Wed.", "time": "7:00 AM", "date": "Apr 9", "name": "Morning Yoga", "meta": "Studio A", "tags": ["yoga", "morning"] }
 ]

@@ -261,6 +261,10 @@ body {
   font-size: 10px; color: rgba(255,255,255,.35);
   text-align: center; margin-top: auto; margin-bottom: auto;
 }
+.cal-event-img {
+  width: 100%; border-radius: 4px; object-fit: cover;
+  height: 55px; display: block; margin-bottom: 3px;
+}
 
 /* ══ Commercial Strip ══ */
 @keyframes marquee {

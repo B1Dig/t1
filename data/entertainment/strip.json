@@ -1,0 +1,7 @@
+[
+  { "id": "1", "icon": "🎬", "text": "Now Showing — The Dark Knight", "tags": ["film", "showing"] },
+  { "id": "2", "icon": "🎟️", "text": "Tickets at the Door — $5 Students / $8 General", "tags": ["info", "tickets"] },
+  { "id": "3", "icon": "🎵", "text": "Live Jazz Night — Wednesday 8:00 PM", "tags": ["live", "music"] },
+  { "id": "4", "icon": "🎤", "text": "Stand-Up Comedy — Thursday 7:30 PM", "tags": ["live", "comedy"] },
+  { "id": "5", "icon": "📽️", "text": "Movie Marathon Every Friday Night", "tags": ["film", "info"] }
+]

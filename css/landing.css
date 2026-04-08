@@ -61,9 +61,9 @@ main {
 
 .facility-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
-    max-width: 900px;
+    max-width: 1100px;
     width: 100%;
 }
 
@@ -107,9 +107,10 @@ main {
 }
 
 /* Accent colors per card */
-.facility-card.gym   { --accent: #22c55e; }
-.facility-card.dining { --accent: #f59e0b; }
-.facility-card.campus { --accent: #3b82f6; }
+.facility-card.gym           { --accent: #22c55e; }
+.facility-card.dining        { --accent: #f59e0b; }
+.facility-card.campus        { --accent: #3b82f6; }
+.facility-card.entertainment { --accent: #a855f7; }
 
 .facility-card:hover .card-label { color: var(--accent); }
 .facility-card:hover { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 12px 40px rgba(0,0,0,0.4); }
@@ -121,6 +122,9 @@ footer {
     color: rgba(255,255,255,0.2);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 860px) {
+    .facility-grid { grid-template-columns: repeat(2, 1fr); max-width: 600px; }
+}
+@media (max-width: 480px) {
     .facility-grid { grid-template-columns: 1fr; max-width: 360px; }
 }

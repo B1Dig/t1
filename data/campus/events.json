@@ -1,6 +1,6 @@
 [
-  { "dow": "Mon.", "time": "10:00 AM", "date": "Today", "name": "Career Fair", "meta": "Campus Center, 2nd Floor" },
-  { "dow": "Mon.", "time": "2:00 PM", "date": "Today", "name": "CS410 Project Demo", "meta": "McCormack Hall 117" },
-  { "dow": "Tue.", "time": "12:00 PM", "date": "Tomorrow", "name": "Student Government Meeting", "meta": "University Hall" },
-  { "dow": "Wed.", "time": "6:00 PM", "date": "Apr 9", "name": "Film Screening Night", "meta": "Clark Athletic Center" }
+  { "dow": "Mon.", "time": "10:00 AM", "date": "Today", "name": "Career Fair", "meta": "Campus Center, 2nd Floor", "tags": ["academic", "career"] },
+  { "dow": "Mon.", "time": "2:00 PM", "date": "Today", "name": "CS410 Project Demo", "meta": "McCormack Hall 117", "tags": ["academic", "cs"] },
+  { "dow": "Tue.", "time": "12:00 PM", "date": "Tomorrow", "name": "Student Government Meeting", "meta": "University Hall", "tags": ["student", "government"] },
+  { "dow": "Wed.", "time": "6:00 PM", "date": "Apr 9", "name": "Film Screening Night", "meta": "Clark Athletic Center", "tags": ["entertainment", "film"] }
 ]

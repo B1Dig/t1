@@ -1,6 +1,6 @@
 [
-  { "dow": "Mon.", "time": "7:00 AM", "date": "Today", "name": "Breakfast", "meta": "Main Dining Hall" },
-  { "dow": "Mon.", "time": "11:00 AM", "date": "Today", "name": "Lunch", "meta": "Main Dining Hall" },
-  { "dow": "Mon.", "time": "5:00 PM", "date": "Today", "name": "Dinner", "meta": "Main Dining Hall" },
-  { "dow": "Tue.", "time": "7:00 AM", "date": "Tomorrow", "name": "Breakfast", "meta": "Main Dining Hall" }
+  { "dow": "Mon.", "time": "7:00 AM", "date": "Today", "name": "Breakfast", "meta": "Main Dining Hall", "tags": ["breakfast", "daily"] },
+  { "dow": "Mon.", "time": "11:00 AM", "date": "Today", "name": "Lunch", "meta": "Main Dining Hall", "tags": ["lunch", "daily"] },
+  { "dow": "Mon.", "time": "5:00 PM", "date": "Today", "name": "Dinner", "meta": "Main Dining Hall", "tags": ["dinner", "daily"] },
+  { "dow": "Tue.", "time": "7:00 AM", "date": "Tomorrow", "name": "Breakfast", "meta": "Main Dining Hall", "tags": ["breakfast", "daily"] }
 ]
