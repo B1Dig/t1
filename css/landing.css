@@ -1,90 +1,126 @@
-:root {
-    --md-primary-fg-color: #0000FF;
-    --md-text-color: #d5d6db;
-    --md-default-bg-color: #1e1e24;
-    --md-divider-color: #484848;
-    --md-link-color: #7c8ce6;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'EB Garamond', serif;
-    font-size: 1.1rem;
-    background-color: var(--md-default-bg-color);
-    color: var(--md-text-color);
-    color-scheme: dark;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background: #0a0a0f;
+    color: #e0e0e8;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
-    background-color: var(--md-primary-fg-color);
-    color: #ffffff;
-    padding: 0.5rem 1rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-.header-inner {
-    max-width: 800px;
-    margin: 0 auto;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
     display: flex;
     align-items: center;
-    height: 48px;
+    justify-content: space-between;
 }
 
 .site-title {
-    font-size: 1.25rem;
-    font-weight: 500;
-    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 700;
     color: white;
+    text-decoration: none;
     letter-spacing: 0.5px;
 }
 
+.dev-link {
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.dev-link:hover { color: rgba(255,255,255,0.6); }
+
 main {
-    max-width: 800px;
-    margin: 3rem auto;
-    padding: 0 1rem;
-    min-height: 60vh;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
 }
 
-h1 {
-    font-weight: 400;
-    color: #f5f5f5;
-    margin-top: 0;
-    margin-bottom: 1.5rem;
-    line-height: 1.3;
-    font-size: 2.5em;
-    border-bottom: 1px solid var(--md-divider-color);
-    padding-bottom: 0.5rem;
+.picker-heading {
+    text-align: center;
+    margin-bottom: 3rem;
 }
 
-p {
-    margin-bottom: 1em;
+.picker-heading h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.5rem;
 }
+
+.picker-heading p {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.45);
+}
+
+.facility-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 900px;
+    width: 100%;
+}
+
+.facility-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.facility-card:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-4px);
+}
+
+.facility-card .card-icon {
+    font-size: 3rem;
+    line-height: 1;
+}
+
+.facility-card .card-label {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+}
+
+.facility-card .card-desc {
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.5;
+}
+
+/* Accent colors per card */
+.facility-card.gym   { --accent: #22c55e; }
+.facility-card.dining { --accent: #f59e0b; }
+.facility-card.campus { --accent: #3b82f6; }
+
+.facility-card:hover .card-label { color: var(--accent); }
+.facility-card:hover { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 12px 40px rgba(0,0,0,0.4); }
 
 footer {
     text-align: center;
-    padding: 2rem 0;
-    border-top: 1px solid var(--md-divider-color);
-    color: #888;
-    font-size: 1rem;
+    padding: 1.5rem;
+    font-size: 12px;
+    color: rgba(255,255,255,0.2);
 }
 
-.journal {
-    margin-top: 2rem;
-}
-
-.entry {
-    border-left: 3px solid var(--md-primary-fg-color);
-    padding-left: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.entry h3 {
-    margin: 0 0 0.5rem 0;
-    color: #ffffff;
+@media (max-width: 640px) {
+    .facility-grid { grid-template-columns: 1fr; max-width: 360px; }
 }

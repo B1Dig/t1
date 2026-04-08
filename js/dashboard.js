@@ -1,4 +1,58 @@
 /* ══════════════════════════════════════════════
+   MODE CONFIG
+══════════════════════════════════════════════ */
+const MODES = {
+  gym: {
+    label: 'Fitness Center',
+    eventsTitle: "Today's Schedule",
+    showCalendar: true,
+    backgrounds: [
+      'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2670&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2670&auto=format&fit=crop',
+    ],
+    stripDefaults: [
+      { id: '1', icon: '🏋️', text: 'Fitness Center — Open 6AM to 10PM', tag: 'HOURS' },
+      { id: '2', icon: '🧘', text: 'Yoga Class — Mon & Wed 7:00 AM',     tag: 'CLASS' },
+      { id: '3', icon: '🏃', text: 'Cardio Bootcamp — Tue & Thu 6:30 PM', tag: 'CLASS' },
+      { id: '4', icon: '💪', text: 'Personal Training Available',          tag: 'INFO' },
+    ],
+  },
+  dining: {
+    label: 'Dining Hall',
+    eventsTitle: 'Meal Times',
+    showCalendar: false,
+    backgrounds: [
+      'https://images.unsplash.com/photo-1567521464027-f127ff144326?q=80&w=2748&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2670&auto=format&fit=crop',
+    ],
+    stripDefaults: [
+      { id: '1', icon: '🍳', text: 'Breakfast — 7:00 AM to 10:30 AM',  tag: 'HOURS' },
+      { id: '2', icon: '🥗', text: 'Lunch — 11:00 AM to 2:30 PM',      tag: 'HOURS' },
+      { id: '3', icon: '🍽️', text: 'Dinner — 5:00 PM to 8:00 PM',      tag: 'HOURS' },
+      { id: '4', icon: '☕', text: 'Coffee Bar Open All Day',            tag: 'INFO' },
+    ],
+  },
+  campus: {
+    label: 'Campus',
+    eventsTitle: "Today's Events",
+    showCalendar: false,
+    backgrounds: [
+      'https://images.unsplash.com/photo-1541753236788-b0ac1fc5009d?q=80&w=2612&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=2670&auto=format&fit=crop',
+    ],
+    stripDefaults: [
+      { id: '1', icon: '🎓', text: 'Welcome to UMass Boston',              tag: 'NEWS' },
+      { id: '2', icon: '📅', text: 'Spring 2025 Registration Now Open',    tag: 'REGISTER' },
+      { id: '3', icon: '🏆', text: 'UMass Boston Athletics',               tag: 'SPORTS' },
+      { id: '4', icon: '📢', text: 'Campus Events Every Week',             tag: 'EVENTS' },
+      { id: '5', icon: '🌐', text: 'Online & Hybrid Courses Available',    tag: 'ONLINE' },
+    ],
+  },
+};
+const DEFAULT_MODE = 'campus';
+
+
+/* ══════════════════════════════════════════════
    GLOBAL STATE
 ══════════════════════════════════════════════ */
 let calModalDay  = null;
@@ -6,13 +60,7 @@ let calHolidays  = [];
 let weekOffset   = 0;
 let _didDrag     = false;
 
-const DEFAULT_COMMERCIAL = [
-  { id: '1', icon: '🎓', text: 'Welcome to Monroe Community College', tag: 'NEWS' },
-  { id: '2', icon: '📅', text: 'Spring 2025 Registration Now Open',    tag: 'REGISTER' },
-  { id: '3', icon: '🏆', text: 'MCC Athletics — Go Tribunes!',          tag: 'SPORTS' },
-  { id: '4', icon: '📢', text: 'Campus Events Every Week',              tag: 'EVENTS' },
-  { id: '5', icon: '🌐', text: 'Online & Hybrid Courses Available',     tag: 'ONLINE' },
-];
+const DEFAULT_COMMERCIAL = MODES[DEFAULT_MODE].stripDefaults;
 
 
 /* ══════════════════════════════════════════════
@@ -201,15 +249,15 @@ function closeModal(id) {
 /* ══════════════════════════════════════════════
    COMMERCIAL STRIP
 ══════════════════════════════════════════════ */
-function getCommercialSections() {
+function getCommercialSections(modeStripDefaults) {
   const s = localStorage.getItem('commercial_sections');
-  return s ? JSON.parse(s) : DEFAULT_COMMERCIAL;
+  return s ? JSON.parse(s) : (modeStripDefaults || DEFAULT_COMMERCIAL);
 }
 function saveCommercialSections(s) { localStorage.setItem('commercial_sections', JSON.stringify(s)); }
 
-function renderCommercialStrip() {
+function renderCommercialStrip(modeStripDefaults) {
   const track = document.getElementById('commercial-track');
-  const secs  = getCommercialSections();
+  const secs  = getCommercialSections(modeStripDefaults);
   if (!secs.length) { track.innerHTML = ''; return; }
   const build = () => secs.map(s => `
     <div class="commercial-section">
@@ -264,6 +312,21 @@ function deleteCommercialSection(id) {
 ══════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
 
+  /* ── Resolve mode from URL ── */
+  const params   = new URLSearchParams(window.location.search);
+  const modeName = params.get('mode') || DEFAULT_MODE;
+  const mode     = MODES[modeName] || MODES[DEFAULT_MODE];
+
+  /* Apply mode: events title */
+  const ecbTitle = document.querySelector('.ecb-title');
+  if (ecbTitle) ecbTitle.textContent = mode.eventsTitle;
+
+  /* Apply mode: calendar visibility */
+  if (!mode.showCalendar) {
+    const cal = document.getElementById('center-calendar');
+    if (cal) cal.style.display = 'none';
+  }
+
   /* Modal overlay close */
   document.querySelectorAll('.modal-overlay').forEach(o => {
     o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
@@ -276,10 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ── Media Carousel ── */
   const carousel = document.getElementById('carousel-container');
-  const playlist = [
-    { type: 'image', src: 'https://images.unsplash.com/photo-1541753236788-b0ac1fc5009d?q=80&w=2612&auto=format&fit=crop' },
-    { type: 'image', src: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=2670&auto=format&fit=crop' },
-  ];
+  const playlist = mode.backgrounds.map(src => ({ type: 'image', src }));
   let idx = 0, cur = null;
   function showNextMedia() {
     const m = playlist[idx];
@@ -443,5 +503,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: false });
 
   /* Commercial strip */
-  renderCommercialStrip();
+  renderCommercialStrip(mode.stripDefaults);
 });

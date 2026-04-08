@@ -3,85 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team B1</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css?family=Orbitron:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <title>Team B1 — Display Setup</title>
     <link rel="stylesheet" href="css/landing.css">
 </head>
 <body>
 
     <header>
-        <div class="header-inner">
-            <a href="#" class="site-title">Team B1</a>
-        </div>
+        <span class="site-title">Team B1 · Digital Signage</span>
+        <a href="dev.html" class="dev-link">Developer view →</a>
     </header>
 
     <main>
-        <h2>User Manageable Digital Signage</h2>
+        <div class="picker-heading">
+            <h1>Choose a Display Mode</h1>
+            <p>Select the facility this screen is installed in.</p>
+        </div>
 
-                <a href="https://www.cs.umb.edu/~hdeblois/cs410/s26/longproj-02/ShawnReardon_DigitalSigns_cs410-02.pdf">Link to our client's project document.</a>
+        <div class="facility-grid">
+            <a href="index.html?mode=gym" class="facility-card gym">
+                <div class="card-icon">🏋️</div>
+                <div class="card-label">Fitness Center</div>
+                <div class="card-desc">Today's classes, workout schedule, and fitness events.</div>
+            </a>
 
-                <a href="index.html">Dashboard (main display)</a>
-                &nbsp;|&nbsp;
-                <a href="frontend/pages/news.html">News Feed</a>
-                &nbsp;|&nbsp;
-                <a href="frontend/pages/calendar-weekly.html">Calendar (Weekly)</a>
-                &nbsp;|&nbsp;
-                <a href="frontend/pages/calendar-monthly.html">Calendar (Monthly)</a>
+            <a href="index.html?mode=dining" class="facility-card dining">
+                <div class="card-icon">🍽️</div>
+                <div class="card-label">Dining Hall</div>
+                <div class="card-desc">Meal times, today's menu highlights, and dining events.</div>
+            </a>
 
-        <h2>Development Journal</h2>
-
-        <section class="journal">
-            <div class="entry">
-                <h3>Luke</h3>
-                <p>
-                    Requirements:
-                </p>
-            </div>
-
-            <div class="entry">
-                <h3>Olivier</h3>
-                <p>
-                    Requirements:
-                </p>
-            </div>
-
-            <div class="entry">
-                <h3>Suraj</h3>
-                <p>
-                    Requirements:
-                </p>
-            </div>
-
-            <div class="entry">
-                <h3>Bruce</h3>
-                <p>
-                    Requirements:
-		<br>
-		    Rotating ad content
-                </p>
-            </div>
-
-            <div class="entry">
-                <h3>Mamaar</h3>
-                <p>
-                    Requirements:
-                </p>
-            </div>
-            <div class="entry">
-                <h3>Igor</h3>
-                <p>
-                    Requirements:
-                </p>
-            </div>
-        </section>
-
+            <a href="index.html?mode=campus" class="facility-card campus">
+                <div class="card-icon">🎓</div>
+                <div class="card-label">Campus</div>
+                <div class="card-desc">Campus-wide events, announcements, and general info.</div>
+            </a>
+        </div>
     </main>
 
     <footer>
-        <p>by Luke, Olivier, Suraj, Bruce, Mamaar, and Igor</p>
+        UMass Boston · B1 Digital Signage System
     </footer>
 
 </body>

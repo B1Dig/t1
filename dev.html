@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team B1 — Developer Journal</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Orbitron:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --md-primary-fg-color: #0000FF;
+            --md-text-color: #d5d6db;
+            --md-default-bg-color: #1e1e24;
+            --md-divider-color: #484848;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'EB Garamond', serif;
+            font-size: 1.1rem;
+            background-color: var(--md-default-bg-color);
+            color: var(--md-text-color);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        header {
+            background-color: var(--md-primary-fg-color);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            position: sticky; top: 0; z-index: 10;
+        }
+        .header-inner {
+            max-width: 800px; margin: 0 auto;
+            display: flex; align-items: center; height: 48px;
+            justify-content: space-between;
+        }
+        .site-title { font-size: 1.25rem; font-weight: 500; text-decoration: none; color: white; }
+        .back-link { font-size: 13px; color: rgba(255,255,255,0.75); text-decoration: none; }
+        .back-link:hover { color: white; }
+        main { max-width: 800px; margin: 3rem auto; padding: 0 1rem; min-height: 60vh; }
+        h2 { font-weight: 400; color: #f5f5f5; margin: 2rem 0 1rem; border-bottom: 1px solid var(--md-divider-color); padding-bottom: 0.5rem; }
+        p { margin-bottom: 1em; }
+        a { color: #7c8ce6; }
+        footer { text-align: center; padding: 2rem 0; border-top: 1px solid var(--md-divider-color); color: #888; font-size: 1rem; }
+        .journal { margin-top: 2rem; }
+        .entry { border-left: 3px solid var(--md-primary-fg-color); padding-left: 1rem; margin-bottom: 1.5rem; }
+        .entry h3 { margin: 0 0 0.5rem 0; color: #ffffff; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-inner">
+            <span class="site-title">Team B1 — Dev Journal</span>
+            <a href="landing.html" class="back-link">← Display Setup</a>
+        </div>
+    </header>
+
+    <main>
+        <h2>User Manageable Digital Signage</h2>
+
+        <p><a href="https://www.cs.umb.edu/~hdeblois/cs410/s26/longproj-02/ShawnReardon_DigitalSigns_cs410-02.pdf">Link to our client's project document.</a></p>
+
+        <p>
+            <a href="index.html">Dashboard (main display)</a>
+            &nbsp;|&nbsp;
+            <a href="index.html?mode=gym">Gym mode</a>
+            &nbsp;|&nbsp;
+            <a href="index.html?mode=dining">Dining mode</a>
+            &nbsp;|&nbsp;
+            <a href="index.html?mode=campus">Campus mode</a>
+            &nbsp;|&nbsp;
+            <a href="frontend/pages/news.html">News Feed</a>
+            &nbsp;|&nbsp;
+            <a href="frontend/pages/calendar-weekly.html">Calendar (Weekly)</a>
+            &nbsp;|&nbsp;
+            <a href="frontend/pages/calendar-monthly.html">Calendar (Monthly)</a>
+        </p>
+
+        <h2>Development Journal</h2>
+
+        <section class="journal">
+            <div class="entry">
+                <h3>Luke</h3>
+                <p>Requirements:</p>
+            </div>
+            <div class="entry">
+                <h3>Olivier</h3>
+                <p>Requirements:</p>
+            </div>
+            <div class="entry">
+                <h3>Suraj</h3>
+                <p>Requirements:</p>
+            </div>
+            <div class="entry">
+                <h3>Bruce</h3>
+                <p>Requirements:<br>Rotating ad content</p>
+            </div>
+            <div class="entry">
+                <h3>Mamaar</h3>
+                <p>Requirements:</p>
+            </div>
+            <div class="entry">
+                <h3>Igor</h3>
+                <p>Requirements:</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>by Luke, Olivier, Suraj, Bruce, Mamaar, and Igor</p>
+    </footer>
+
+</body>
+</html>
