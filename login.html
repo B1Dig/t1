@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team B1 — Sign In</title>
+  <link rel="stylesheet" href="css/login.css">
+  <script src="js/auth.js"></script>
+  <script>
+    if (sessionStorage.getItem('b1_auth') === '1')
+      window.location.replace('index.html');
+  </script>
+</head>
+<body>
+
+<div class="login-card">
+  <div class="login-logo">
+    Team B1 · Digital Signage
+    <span>UMass Boston</span>
+  </div>
+
+  <div class="login-field">
+    <label for="pw-input">Password</label>
+    <input type="password" id="pw-input" placeholder="Enter password" autocomplete="current-password" />
+  </div>
+
+  <div class="login-error" id="login-error"></div>
+
+  <button class="login-btn" id="login-btn">Sign In</button>
+</div>
+
+<script>
+  const input = document.getElementById('pw-input');
+  const errEl = document.getElementById('login-error');
+
+  function attempt() {
+    if (b1Login(input.value)) {
+      window.location.replace('index.html');
+    } else {
+      errEl.textContent = 'Incorrect password';
+      input.classList.add('error');
+      input.addEventListener('animationend', () => input.classList.remove('error'), { once: true });
+      input.select();
+    }
+  }
+
+  document.getElementById('login-btn').addEventListener('click', attempt);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') attempt(); });
+  input.focus();
+</script>
+
+</body>
+</html>
