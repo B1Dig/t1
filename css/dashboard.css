@@ -395,3 +395,23 @@ body {
   transition: background 0.2s;
 }
 .restore-btn:hover { background: rgba(255,255,255,0.2); }
+
+/* ══ Widget sidebar ══ */
+.widget-sidebar {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 200;
+    pointer-events: none;
+}
+
+    .widget-sidebar > .draggable-widget {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        pointer-events: auto;
+        transition: margin 0.2s ease, height 0.2s ease;
+    }
