@@ -14,63 +14,133 @@
 <div class="vignette-overlay"></div>
 <div class="restore-bar" id="restore-bar"></div>
 
-<!-- ══ Events Widget (top right) ══ -->
-<div class="draggable-widget" id="widget-events" data-size="compact">
-  <div class="widget-drag-handle" id="handle-events">
-    <span class="drag-label">⠿ Move</span>
-    <button class="widget-close-btn" onclick="hideWidget('events')">✕</button>
-  </div>
-
-  <!-- COMPACT -->
-  <div class="wsize-compact">
-    <div class="events-compact-badge" onclick="toggleWidgetSize('events')">
-      <div class="ecb-icon">📅</div>
-      <div class="ecb-body">
-        <div class="ecb-title" id="ecb-title-label">Upcoming Events</div>
-        <div class="ecb-day-nav">
-          <button class="ecb-day-btn" onclick="shiftEvDay(-1); event.stopPropagation()">‹</button>
-          <span class="ecb-day-label" id="ecb-day-label">Today</span>
-          <button class="ecb-day-btn" onclick="shiftEvDay(1); event.stopPropagation()">›</button>
+<!-- ══ Widget sidebar ══ -->
+<div class="widget-sidebar">
+    <!-- ══ Events Widget (top right) ══ -->
+    <div class="draggable-widget" id="widget-events" data-size="compact">
+        <div class="widget-drag-handle" id="handle-events">
+            <span class="drag-label">⠿ Move</span>
+            <button class="widget-close-btn" onclick="hideWidget('events')">✕</button>
         </div>
-        <div class="ecb-next" id="ecb-next">Loading...</div>
-      </div>
-      <div class="ecb-count" id="ecb-count">0</div>
-    </div>
-  </div>
 
-  <!-- EXPANDED -->
-  <div class="wsize-expanded">
-    <div class="upcoming-events">
-      <div class="event-module">
-        <div class="topbar"></div>
-        <section class="card">
-          <div class="title-row">
-            <div class="title">Upcoming Events</div>
-            <div class="ev-day-nav">
-              <button class="ev-day-btn" onclick="shiftEvDay(-1)">‹</button>
-              <span class="ev-day-label" id="ev-day-label">Today</span>
-              <button class="ev-day-btn" onclick="shiftEvDay(1)">›</button>
+        <!-- COMPACT -->
+        <div class="wsize-compact">
+            <div class="events-compact-badge" onclick="toggleWidgetSize('events')">
+                <div class="ecb-icon">📅</div>
+                <div class="ecb-body">
+                    <div class="ecb-title" id="ecb-title-label">Upcoming Events</div>
+                    <div class="ecb-day-nav">
+                        <button class="ecb-day-btn" onclick="shiftEvDay(-1); event.stopPropagation()">‹</button>
+                        <span class="ecb-day-label" id="ecb-day-label">Today</span>
+                        <button class="ecb-day-btn" onclick="shiftEvDay(1); event.stopPropagation()">›</button>
+                    </div>
+                    <div class="ecb-next" id="ecb-next">Loading...</div>
+                </div>
+                <div class="ecb-count" id="ecb-count">0</div>
             </div>
-            <button class="events-collapse-btn" onclick="toggleWidgetSize('events')">▲ Minimize</button>
-          </div>
-          <div id="events-list">
-            <div class="ev-row">
-              <div class="col-left"><div class="dow">Fri.</div><div class="time">8:00 AM</div></div>
-              <div class="col-right"><div class="date">October 2</div><div class="name">MCC Board of Trustees Executive Session</div><div class="meta">Streaming the Board of Trustees web page</div></div>
+        </div>
+
+        <!-- EXPANDED -->
+        <div class="wsize-expanded">
+            <div class="upcoming-events">
+                <div class="event-module">
+                    <div class="topbar"></div>
+                    <section class="card">
+                        <div class="title-row">
+                            <div class="title">Upcoming Events</div>
+                            <div class="ev-day-nav">
+                                <button class="ev-day-btn" onclick="shiftEvDay(-1)">‹</button>
+                                <span class="ev-day-label" id="ev-day-label">Today</span>
+                                <button class="ev-day-btn" onclick="shiftEvDay(1)">›</button>
+                            </div>
+                            <button class="events-collapse-btn" onclick="toggleWidgetSize('events')">▲ Minimize</button>
+                        </div>
+                        <div id="events-list">
+                            <div class="ev-row">
+                                <div class="col-left"><div class="dow">Fri.</div><div class="time">8:00 AM</div></div>
+                                <div class="col-right"><div class="date">October 2</div><div class="name">MCC Board of Trustees Executive Session</div><div class="meta">Streaming the Board of Trustees web page</div></div>
+                            </div>
+                            <div class="ev-row">
+                                <div class="col-left"><div class="dow">Mon.</div><div class="time">8:45 AM</div></div>
+                                <div class="col-right"><div class="date">October 5</div><div class="name">2022 Teaching &amp; Learning Conference</div><div class="meta">Online Webinar</div></div>
+                            </div>
+                            <div class="ev-row">
+                                <div class="col-left"><div class="dow">Wed.</div><div class="time">12:00 PM</div></div>
+                                <div class="col-right"><div class="date">October 7</div><div class="name">Medical Office Assistant Program Info</div><div class="meta">Zoom Webinar</div></div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
-            <div class="ev-row">
-              <div class="col-left"><div class="dow">Mon.</div><div class="time">8:45 AM</div></div>
-              <div class="col-right"><div class="date">October 5</div><div class="name">2022 Teaching &amp; Learning Conference</div><div class="meta">Online Webinar</div></div>
-            </div>
-            <div class="ev-row">
-              <div class="col-left"><div class="dow">Wed.</div><div class="time">12:00 PM</div></div>
-              <div class="col-right"><div class="date">October 7</div><div class="name">Medical Office Assistant Program Info</div><div class="meta">Zoom Webinar</div></div>
-            </div>
-          </div>
-        </section>
-      </div>
+        </div>
     </div>
-  </div>
+
+    <!-- ══ Clock + Weather Widget (bottom right) ══ -->
+    <div class="draggable-widget" id="widget-clock" data-size="compact">
+        <div class="widget-drag-handle" id="handle-clock">
+            <span class="drag-label">⠿ Move</span>
+            <button class="widget-close-btn" onclick="hideWidget('clock')">✕</button>
+        </div>
+
+        <!-- COMPACT -->
+        <div class="wsize-compact">
+            <div class="clock-compact-card" onclick="toggleWidgetSize('clock')">
+                <div class="cc-row1">
+                    <span class="cc-time" id="cc-time">--:--</span>
+                    <span class="cc-pipe">|</span>
+                    <span class="cc-weather-inline">
+                        <span id="cc-icon"></span>
+                        <span class="cc-temp-inline" id="cc-temp">--°</span>
+                    </span>
+                </div>
+                <div class="cc-row2">
+                    <span class="cc-date-inline" id="cc-date">--</span>
+                    <span class="cc-desc-inline" id="cc-desc">--</span>
+                </div>
+                <div class="cc-expand-hint">click to expand</div>
+            </div>
+        </div>
+
+        <!-- EXPANDED -->
+        <div class="wsize-expanded">
+            <div class="fixed-widget-container">
+                <div class="widget">
+                    <h3>Local Time</h3>
+                    <div class="primary-display" id="time">--:--</div>
+                    <div class="secondary-display" id="date">Loading...</div>
+                </div>
+                <div class="widget">
+                    <h3>Weather (NYC)</h3>
+                    <div class="primary-display">
+                        <div id="weather-icon-container"></div>
+                        <div id="temp">--°</div>
+                    </div>
+                    <div class="secondary-display" id="weather-desc">Loading...</div>
+                    <div class="weather-extras">
+                        <div class="weather-extra-item">
+                            <div class="wex-label">Wind</div>
+                            <div class="wex-val" id="wex-wind">--</div>
+                        </div>
+                        <div class="weather-extra-item">
+                            <div class="wex-label">Humidity</div>
+                            <div class="wex-val" id="wex-humidity">--</div>
+                        </div>
+                        <div class="weather-extra-item">
+                            <div class="wex-label">Feels Like</div>
+                            <div class="wex-val" id="wex-feels">--</div>
+                        </div>
+                        <div class="weather-extra-item">
+                            <div class="wex-label">UV Index</div>
+                            <div class="wex-val" id="wex-uv">--</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="collapse-row">
+                    <button class="collapse-btn" onclick="toggleWidgetSize('clock')">▲ Minimize</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- ══ Center Calendar ══ -->
@@ -82,73 +152,6 @@
     <button class="cal-today-btn" onclick="calGoToday()">Today</button>
   </div>
   <div class="cal-week" id="cal-week"></div>
-</div>
-
-<!-- ══ Clock + Weather Widget (bottom right) ══ -->
-<div class="draggable-widget" id="widget-clock" data-size="compact">
-  <div class="widget-drag-handle" id="handle-clock">
-    <span class="drag-label">⠿ Move</span>
-    <button class="widget-close-btn" onclick="hideWidget('clock')">✕</button>
-  </div>
-
-  <!-- COMPACT -->
-  <div class="wsize-compact">
-    <div class="clock-compact-card" onclick="toggleWidgetSize('clock')">
-      <div class="cc-row1">
-        <span class="cc-time" id="cc-time">--:--</span>
-        <span class="cc-pipe">|</span>
-        <span class="cc-weather-inline">
-          <span id="cc-icon"></span>
-          <span class="cc-temp-inline" id="cc-temp">--°</span>
-        </span>
-      </div>
-      <div class="cc-row2">
-        <span class="cc-date-inline" id="cc-date">--</span>
-        <span class="cc-desc-inline" id="cc-desc">--</span>
-      </div>
-      <div class="cc-expand-hint">click to expand</div>
-    </div>
-  </div>
-
-  <!-- EXPANDED -->
-  <div class="wsize-expanded">
-    <div class="fixed-widget-container">
-      <div class="widget">
-        <h3>Local Time</h3>
-        <div class="primary-display" id="time">--:--</div>
-        <div class="secondary-display" id="date">Loading...</div>
-      </div>
-      <div class="widget">
-        <h3>Weather (NYC)</h3>
-        <div class="primary-display">
-          <div id="weather-icon-container"></div>
-          <div id="temp">--°</div>
-        </div>
-        <div class="secondary-display" id="weather-desc">Loading...</div>
-        <div class="weather-extras">
-          <div class="weather-extra-item">
-            <div class="wex-label">Wind</div>
-            <div class="wex-val" id="wex-wind">--</div>
-          </div>
-          <div class="weather-extra-item">
-            <div class="wex-label">Humidity</div>
-            <div class="wex-val" id="wex-humidity">--</div>
-          </div>
-          <div class="weather-extra-item">
-            <div class="wex-label">Feels Like</div>
-            <div class="wex-val" id="wex-feels">--</div>
-          </div>
-          <div class="weather-extra-item">
-            <div class="wex-label">UV Index</div>
-            <div class="wex-val" id="wex-uv">--</div>
-          </div>
-        </div>
-      </div>
-      <div class="collapse-row">
-        <button class="collapse-btn" onclick="toggleWidgetSize('clock')">▲ Minimize</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- ══ Commercial Strip ══ -->
