@@ -415,3 +415,53 @@ body {
         pointer-events: auto;
         transition: margin 0.2s ease, height 0.2s ease;
     }
+
+/* ══ Edit toggle area ══ */
+.edit-mode-hover-zone {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 100px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 15px;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+    .edit-mode-hover-zone:hover {
+        opacity: 1;
+    }
+
+#edit-mode-btn {
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: background 0.2s, transform 0.1s;
+}
+
+    #edit-mode-btn:hover {
+        background: rgba(255,255,255,0.2);
+    }
+
+    #edit-mode-btn:active {
+        transform: scale(0.95);
+    }
+
+/* ══ Editable elements ══ */
+body.edit-only .widget-drag-handle,
+body.edit-only .events-collapse-btn,
+body.edit-only .collapse-btn,
+body.edit-only .commercial-edit-btn {
+    display: none !important;
+}
