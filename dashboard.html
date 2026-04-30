@@ -10,16 +10,14 @@
 </head>
 <body>
 
-<div class="edit-mode-hover-zone">
-    <button id="edit-mode-btn" onclick="toggleEditMode()">Hide Edit Controls</button>
-</div>
+    <div class="edit-mode-hover-zone">
+        <button id="edit-mode-btn" onclick="toggleEditMode()">Hide Edit Controls</button>
+    </div>
 
-<main class="main-content" id="carousel-container"></main>
-<div class="vignette-overlay"></div>
-<div class="restore-bar" id="restore-bar"></div>
+    <main class="main-content" id="carousel-container"></main>
+    <div class="vignette-overlay"></div>
+    <div class="restore-bar" id="restore-bar"></div>
 
-<!-- ══ Widget sidebar ══ -->
-<div class="widget-sidebar">
     <!-- ══ Events Widget (top right) ══ -->
     <div class="draggable-widget" id="widget-events" data-size="compact">
         <div class="widget-drag-handle" id="handle-events">
@@ -77,6 +75,17 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- ══ Center Calendar ══ -->
+    <div class="center-calendar" id="center-calendar">
+        <div class="cal-nav">
+            <button class="cal-nav-btn" onclick="calNav(-1)" title="Previous week">‹</button>
+            <div class="cal-week-range" id="cal-week-range">—</div>
+            <button class="cal-nav-btn" onclick="calNav(1)" title="Next week">›</button>
+            <button class="cal-today-btn" onclick="calGoToday()">Today</button>
+        </div>
+        <div class="cal-week" id="cal-week"></div>
     </div>
 
     <!-- ══ Clock + Weather Widget (bottom right) ══ -->
@@ -145,63 +154,51 @@
             </div>
         </div>
     </div>
-</div>
 
-<!-- ══ Center Calendar ══ -->
-<div class="center-calendar" id="center-calendar">
-  <div class="cal-nav">
-    <button class="cal-nav-btn" onclick="calNav(-1)" title="Previous week">‹</button>
-    <div class="cal-week-range" id="cal-week-range">—</div>
-    <button class="cal-nav-btn" onclick="calNav(1)" title="Next week">›</button>
-    <button class="cal-today-btn" onclick="calGoToday()">Today</button>
-  </div>
-  <div class="cal-week" id="cal-week"></div>
-</div>
-
-<!-- ══ Commercial Strip ══ -->
-<div class="commercial-strip" id="commercial-strip">
-  <div class="commercial-track" id="commercial-track"></div>
-  <button class="commercial-edit-btn" onclick="openCommercialEditor()" title="Edit strip">✎</button>
-</div>
-
-<!-- ══ Calendar Event Modal ══ -->
-<div class="modal-overlay" id="cal-modal">
-  <div class="modal">
-    <h2 id="cal-modal-title">Events</h2>
-    <div class="modal-section-title">Existing Events</div>
-    <div id="cal-modal-events"></div>
-    <div class="modal-section-title">Add New Event</div>
-    <div class="modal-form">
-      <input type="text" id="new-event-title" placeholder="Event title" />
-      <input type="time" id="new-event-time" />
-      <input type="text" id="new-event-meta" placeholder="Location / notes (optional)" />
+    <!-- ══ Commercial Strip ══ -->
+    <div class="commercial-strip" id="commercial-strip">
+        <div class="commercial-track" id="commercial-track"></div>
+        <button class="commercial-edit-btn" onclick="openCommercialEditor()" title="Edit strip">✎</button>
     </div>
-    <div class="modal-actions">
-      <button class="modal-btn primary" onclick="addCalendarEvent()">Add Event</button>
-      <button class="modal-btn secondary" onclick="closeModal('cal-modal')">Close</button>
-    </div>
-  </div>
-</div>
 
-<!-- ══ Commercial Editor Modal ══ -->
-<div class="modal-overlay" id="commercial-modal">
-  <div class="modal">
-    <h2>Edit Commercial Strip</h2>
-    <div class="modal-section-title">Current Sections</div>
-    <div id="commercial-sections-list"></div>
-    <div class="modal-section-title">Add New Section</div>
-    <div class="modal-form">
-      <input type="text" id="new-comm-icon" placeholder="Emoji / icon (e.g. 🎉)" maxlength="4" />
-      <input type="text" id="new-comm-text" placeholder="Main text" />
-      <input type="text" id="new-comm-tag"  placeholder="Tag label (optional, e.g. NEW)" />
+    <!-- ══ Calendar Event Modal ══ -->
+    <div class="modal-overlay" id="cal-modal">
+        <div class="modal">
+            <h2 id="cal-modal-title">Events</h2>
+            <div class="modal-section-title">Existing Events</div>
+            <div id="cal-modal-events"></div>
+            <div class="modal-section-title">Add New Event</div>
+            <div class="modal-form">
+                <input type="text" id="new-event-title" placeholder="Event title" />
+                <input type="time" id="new-event-time" />
+                <input type="text" id="new-event-meta" placeholder="Location / notes (optional)" />
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn primary" onclick="addCalendarEvent()">Add Event</button>
+                <button class="modal-btn secondary" onclick="closeModal('cal-modal')">Close</button>
+            </div>
+        </div>
     </div>
-    <div class="modal-actions">
-      <button class="modal-btn primary" onclick="addCommercialSection()">Add Section</button>
-      <button class="modal-btn secondary" onclick="closeModal('commercial-modal')">Close</button>
-    </div>
-  </div>
-</div>
 
-<script src="js/dashboard.js"></script>
+    <!-- ══ Commercial Editor Modal ══ -->
+    <div class="modal-overlay" id="commercial-modal">
+        <div class="modal">
+            <h2>Edit Commercial Strip</h2>
+            <div class="modal-section-title">Current Sections</div>
+            <div id="commercial-sections-list"></div>
+            <div class="modal-section-title">Add New Section</div>
+            <div class="modal-form">
+                <input type="text" id="new-comm-icon" placeholder="Emoji / icon (e.g. 🎉)" maxlength="4" />
+                <input type="text" id="new-comm-text" placeholder="Main text" />
+                <input type="text" id="new-comm-tag" placeholder="Tag label (optional, e.g. NEW)" />
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn primary" onclick="addCommercialSection()">Add Section</button>
+                <button class="modal-btn secondary" onclick="closeModal('commercial-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
 </body>
 </html>
