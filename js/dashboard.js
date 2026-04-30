@@ -129,6 +129,22 @@ function updateRestoreBar() {
   bar.classList.toggle('visible', hidden.length > 0);
 }
 
+/* ══════════════════════════════════════════════
+   EDIT VISIBILITY
+══════════════════════════════════════════════ */
+function toggleEditMode() {
+    const body = document.body;
+    const btn = document.getElementById('edit-mode-btn');
+
+    body.classList.toggle('edit-only');
+
+    if (body.classList.contains('edit-only')) {
+        btn.textContent = 'Show Edit Controls';
+    } else {
+        btn.textContent = 'Hide Edit Controls';
+    }
+}
+
 
 /* ══════════════════════════════════════════════
    DRAGGABLE
