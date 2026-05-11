@@ -158,6 +158,7 @@
     <!-- ══ Commercial Strip ══ -->
     <div class="commercial-strip" id="commercial-strip">
         <div class="commercial-track" id="commercial-track"></div>
+        <button class="bg-manage-btn" onclick="openBgManager()" title="Manage background images">🖼</button>
         <button class="commercial-edit-btn" onclick="openCommercialEditor()" title="Edit strip">✎</button>
     </div>
 
@@ -173,9 +174,41 @@
                 <input type="time" id="new-event-time" />
                 <input type="text" id="new-event-meta" placeholder="Location / notes (optional)" />
             </div>
+            <div class="modal-section-title">Thumbnail (optional)</div>
+            <div class="event-img-picker" id="event-img-picker">
+                <div class="event-img-none selected" id="event-img-none-opt" onclick="selectEventImage(null)">None</div>
+            </div>
             <div class="modal-actions">
                 <button class="modal-btn primary" onclick="addCalendarEvent()">Add Event</button>
                 <button class="modal-btn secondary" onclick="closeModal('cal-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ Background Manager Modal ══ -->
+    <div class="modal-overlay" id="bg-modal">
+        <div class="modal bg-modal-inner">
+            <h2>Manage Backgrounds</h2>
+            <div class="modal-section-title">Upload Images</div>
+            <div class="bg-dropzone" id="bg-dropzone">
+                <div class="bg-dropzone-content" id="bg-dropzone-content">
+                    <div class="bg-drop-icon">🖼️</div>
+                    <div class="bg-drop-text">Drag &amp; drop images here</div>
+                    <div class="bg-drop-or">or</div>
+                    <label class="modal-btn primary bg-file-label">
+                        Choose Files
+                        <input type="file" id="bg-file-input" accept="image/*" multiple hidden />
+                    </label>
+                </div>
+                <div class="bg-upload-status" id="bg-upload-status" style="display:none">
+                    <div class="bg-progress-wrap"><div class="bg-progress-bar" id="bg-progress-bar"></div></div>
+                    <div class="bg-progress-text" id="bg-progress-text">Uploading...</div>
+                </div>
+            </div>
+            <div class="modal-section-title">Uploaded Images <span id="bg-count-label"></span></div>
+            <div class="bg-image-grid" id="bg-image-grid"></div>
+            <div class="modal-actions">
+                <button class="modal-btn secondary" onclick="closeModal('bg-modal')">Close</button>
             </div>
         </div>
     </div>

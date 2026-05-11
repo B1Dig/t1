@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dynamic Menu Board</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body {
+      
+      background-image: url('/images/background1.avif');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed; /* Keeps the background still while scrolling */
+    
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+    }
+
+    /* LEFT: SLIDESHOW */
+    .slideshow {
+      width: 65%;
+      position: relative;
+      background: #000;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+    .slide img {
+      width: 600px;       
+      height: 500px;      
+      object-fit: cover;  /* crop to fit nicely */
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .slide img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+  }
+    
+
+    .slide h2 {
+      margin: 10px 0 5px;
+    }
+
+    .slide p {
+      margin: 5px;
+    }
+
+    /* RIGHT: MENU */
+    .menu {
+      width: 50%;
+      /*background: #f4f4f4;*/
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .menu h2 {
+      color: white;
+      border-bottom: 2px solid yellow;
+      padding-bottom: 5px;
+    }
+
+    .menu-item {
+      margin-bottom: 15px;
+      color: white;
+    }
+
+    .menu-item h3 {
+      color: aliceblue;
+      margin: 0;
+    }
+
+    .price {
+      color: aliceblue;
+      color: yellow;
+      font-weight: bold;
+    }
+    .qr-container {
+      position: absolute;
+      bottom: 0;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- the left side section  -->
+  <div class="slideshow" id="slideshow"></div>
+
+  <!-- the right side section -->
+  <div class="menu" id="menu">
+    <div class="qr-container">
+      <div id="qrcode"></div>
+      <p>📱 Scan to Order</p>
+    </div>
+  </div>
+
+  <script>
+    
+    let allItems = [];
+    let currentIndex = 0;
+
+    fetch('menu_cat.json')
+      .then(response => response.json())
+      .then(data => {
+        const menu = data.menu;
+
+        // Combine hot + cold into one array for slideshow
+        allItems = [...menu.hot, ...menu.cold];
+
+        renderMenu(menu);
+        renderSlides(allItems);
+        startSlideshow();
+      });
+
+    function renderMenu(menu) {
+      const menuDiv = document.getElementById('menu');
+
+      // HOT
+      menuDiv.innerHTML += "<h2> Hot Sandwiches</h2>";
+      menu.hot.forEach(item => {
+        menuDiv.innerHTML += `
+          <div class="menu-item">
+            <h3>${item.name} <span class="price">$${item.price}</span></h3>
+            <p>${item.description}</p>
+          </div>
+        `;
+      });
+
+      // COLD
+      menuDiv.innerHTML += "<h2> Cold Sandwiches</h2>";
+      menu.cold.forEach(item => {
+        menuDiv.innerHTML += `
+          <div class="menu-item">
+            <h3>${item.name} <span class="price">$${item.price}</span></h3>
+            <p>${item.description}</p>
+          </div>
+        `;
+      });
+    }
+
+    function renderSlides(items) {
+      const slideshow = document.getElementById('slideshow');
+
+      items.forEach((item, index) => {
+        const slide = document.createElement('div');
+        slide.classList.add('slide');
+        if (index === 0) slide.classList.add('active');
+
+        slide.innerHTML = `
+          <img src="${item.image}" alt="${item.name}">
+          <h2>${item.name}</h2>
+          <p>${item.description}</p>
+          <p class="price">$${item.price}</p>
+        `;
+
+        slideshow.appendChild(slide);
+      });
+    }
+
+    function startSlideshow() {
+      const slides = document.querySelectorAll('.slide');
+
+      setInterval(() => {
+        slides[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % slides.length;
+        slides[currentIndex].classList.add('active');
+      }, 3000); // change every 3 seconds
+    }
+    new QRCode(document.getElementById("qrcode"), {text: "https://umb.sodexomyway.com/en-us/locations/", width: 120, height: 120});
+  </script>
+
+</body>
+</html>

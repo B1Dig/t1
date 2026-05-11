@@ -18,6 +18,8 @@ let calHolidays  = [];
 let weekOffset   = 0;
 let evDayOffset  = 0;
 let _didDrag     = false;
+let _bgMode      = DEFAULT_MODE;
+let _selectedEventImage = null;
 
 const DEFAULT_COMMERCIAL = [];
 
@@ -224,6 +226,7 @@ function openCalModal(day, holidays) {
   document.getElementById('new-event-title').value = '';
   document.getElementById('new-event-time').value  = '';
   document.getElementById('new-event-meta').value  = '';
+  loadEventImagePicker();
   renderCalModalEvents();
   document.getElementById('cal-modal').classList.add('open');
 }
@@ -248,7 +251,8 @@ function renderCalModalEvents() {
     const item = document.createElement('div');
     item.className = 'modal-event-item';
     const ts = [ev.time, ev.meta].filter(Boolean).join(' · ');
-    item.innerHTML = `<div class="ev-info"><div class="ev-name">${ev.title}</div>${ts ? `<div class="ev-time">${ts}</div>` : ''}</div>
+    const thumb = ev.image ? `<img src="${ev.image}" style="width:48px;height:36px;object-fit:cover;border-radius:5px;flex-shrink:0;margin-right:4px;" />` : '';
+    item.innerHTML = `${thumb}<div class="ev-info"><div class="ev-name">${ev.title}</div>${ts ? `<div class="ev-time">${ts}</div>` : ''}</div>
       <button class="modal-delete-btn" onclick="deleteCalEvent('${ev.id}')">Remove</button>`;
     container.appendChild(item);
   });
@@ -260,7 +264,9 @@ function addCalendarEvent() {
   const time  = document.getElementById('new-event-time').value;
   const meta  = document.getElementById('new-event-meta').value.trim();
   const stored = JSON.parse(localStorage.getItem('events') || '[]');
-  stored.push({ id: Date.now().toString(), date: calModalDay.toDateString(), title, time, meta });
+  const ev = { id: Date.now().toString(), date: calModalDay.toDateString(), title, time, meta };
+  if (_selectedEventImage) ev.image = _selectedEventImage;
+  stored.push(ev);
   localStorage.setItem('events', JSON.stringify(stored));
   document.getElementById('new-event-title').value = '';
   document.getElementById('new-event-time').value  = '';
@@ -278,6 +284,302 @@ function deleteCalEvent(id) {
 
 function closeModal(id) {
   document.getElementById(id).classList.remove('open');
+}
+
+
+/* ══════════════════════════════════════════════
+   BACKGROUND MANAGER
+══════════════════════════════════════════════ */
+function openBgManager() {
+  document.getElementById('bg-modal').classList.add('open');
+  loadBgImages();
+}
+
+async function loadBgImages() {
+  const grid    = document.getElementById('bg-image-grid');
+  const countEl = document.getElementById('bg-count-label');
+  grid.innerHTML = '<div class="bg-empty-state">Loading...</div>';
+  const pinned = localStorage.getItem('pinned_bg');
+  try {
+    const r = await fetch(`/api/images/list?mode=${_bgMode}`);
+    if (!r.ok) {
+      const msg = await r.text().catch(() => r.statusText);
+      console.error('List API error:', r.status, msg);
+      grid.innerHTML = `<div class="bg-empty-state">API error ${r.status} — check console for details.</div>`;
+      return;
+    }
+    const urls = await r.json();
+    countEl.textContent = urls.length ? `(${urls.length})` : '';
+    if (!urls.length) {
+      grid.innerHTML = '<div class="bg-empty-state">No images uploaded yet.</div>';
+      return;
+    }
+    grid.innerHTML = '';
+    urls.forEach(url => {
+      const isPinned = url === pinned;
+      const item = document.createElement('div');
+      item.className = 'bg-image-item' + (isPinned ? ' is-pinned' : '');
+      item.innerHTML = `
+        <img src="${url}" loading="lazy" alt="" />
+        <div class="bg-image-controls">
+          <button class="bg-img-action bg-action-pin">${isPinned ? '📌 Unpin' : '📌 Pin'}</button>
+          <button class="bg-img-action bg-action-place">📍 Place</button>
+          <button class="bg-img-action danger bg-action-delete">🗑 Delete</button>
+        </div>`;
+      item.querySelector('.bg-action-pin').onclick    = () => isPinned ? clearPinnedBg() : setPinnedBg(url);
+      item.querySelector('.bg-action-place').onclick  = () => placeImageOnScreen(url);
+      item.querySelector('.bg-action-delete').onclick = e  => deleteBgImage(url, e.currentTarget);
+      grid.appendChild(item);
+    });
+  } catch(e) {
+    console.error('loadBgImages failed:', e);
+    grid.innerHTML = `<div class="bg-empty-state">Could not reach API — are you running via <code>vercel dev</code>?</div>`;
+  }
+}
+
+async function deleteBgImage(url, btn) {
+  const orig = btn.textContent; btn.textContent = '…';
+  try {
+    const r = await fetch('/api/images/delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+    });
+    if (r.ok) {
+      if (localStorage.getItem('pinned_bg') === url) { localStorage.removeItem('pinned_bg'); renderPinnedBadge(); }
+      loadBgImages();
+    } else { btn.textContent = orig; }
+  } catch(e) { btn.textContent = orig; }
+}
+
+
+/* ── Pinned background ── */
+function setPinnedBg(url) {
+  localStorage.setItem('pinned_bg', url);
+  location.reload();
+}
+
+function clearPinnedBg() {
+  localStorage.removeItem('pinned_bg');
+  location.reload();
+}
+
+function renderPinnedBadge() {
+  document.getElementById('pinned-bg-badge')?.remove();
+  if (!localStorage.getItem('pinned_bg')) return;
+  const btn = document.createElement('button');
+  btn.id = 'pinned-bg-badge';
+  btn.className = 'pinned-bg-badge';
+  btn.textContent = '📌 Background pinned — click to resume slideshow';
+  btn.onclick = clearPinnedBg;
+  document.body.appendChild(btn);
+}
+
+
+/* ── Placed images ── */
+function getPlacedImages()      { return JSON.parse(localStorage.getItem('placed_images') || '[]'); }
+function savePlacedImages(arr)  { localStorage.setItem('placed_images', JSON.stringify(arr)); }
+
+function renderPlacedImages() {
+  document.querySelectorAll('.placed-image-wrap').forEach(el => el.remove());
+  getPlacedImages().forEach(createPlacedImageEl);
+}
+
+function placeImageOnScreen(url) {
+  closeModal('bg-modal');
+  const p = {
+    id:    Date.now().toString(),
+    url,
+    x:     Math.round(window.innerWidth  / 2 - 150),
+    y:     Math.round(window.innerHeight / 2 - 100),
+    width: 300,
+  };
+  const arr = getPlacedImages(); arr.push(p); savePlacedImages(arr);
+  createPlacedImageEl(p);
+}
+
+function deletePlacedImage(id) {
+  document.getElementById('placed-' + id)?.remove();
+  savePlacedImages(getPlacedImages().filter(p => p.id !== id));
+}
+
+function createPlacedImageEl(p) {
+  const wrap = document.createElement('div');
+  wrap.className = 'placed-image-wrap';
+  wrap.id = 'placed-' + p.id;
+  wrap.style.cssText = `left:${p.x}px; top:${p.y}px; width:${p.width}px;`;
+  wrap.innerHTML = `
+    <div class="placed-image-hud">
+      <span class="placed-drag-handle" id="pdh-${p.id}">⠿ Move</span>
+      <button class="placed-delete-btn" id="pdb-${p.id}">✕</button>
+    </div>
+    <img src="${p.url}" class="placed-image-img" draggable="false" alt="" />
+    <div class="placed-resize-handle" id="prh-${p.id}"></div>`;
+  document.body.appendChild(wrap);
+
+  document.getElementById('pdb-' + p.id).onclick = () => deletePlacedImage(p.id);
+
+  // Drag
+  const handle = document.getElementById('pdh-' + p.id);
+  handle.addEventListener('mousedown', e => {
+    e.preventDefault();
+    const r = wrap.getBoundingClientRect();
+    const ox = e.clientX - r.left, oy = e.clientY - r.top;
+    handle.classList.add('dragging');
+    const onMove = e => {
+      p.x = Math.max(0, e.clientX - ox);
+      p.y = Math.max(0, e.clientY - oy);
+      wrap.style.left = p.x + 'px';
+      wrap.style.top  = p.y + 'px';
+    };
+    const onUp = () => {
+      handle.classList.remove('dragging');
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup',   onUp);
+      savePlacedImages(getPlacedImages().map(i => i.id === p.id ? { ...i, x: p.x, y: p.y } : i));
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup',   onUp);
+  });
+
+  // Resize
+  const resizeHandle = document.getElementById('prh-' + p.id);
+  resizeHandle.addEventListener('mousedown', e => {
+    e.preventDefault();
+    const startW = wrap.offsetWidth, startX = e.clientX;
+    const onMove = e => {
+      p.width = Math.max(80, startW + e.clientX - startX);
+      wrap.style.width = p.width + 'px';
+    };
+    const onUp = () => {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup',   onUp);
+      savePlacedImages(getPlacedImages().map(i => i.id === p.id ? { ...i, width: p.width } : i));
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup',   onUp);
+  });
+}
+
+
+/* ── Event image picker ── */
+function selectEventImage(url) {
+  _selectedEventImage = url;
+  document.querySelectorAll('.event-img-opt, .event-img-none').forEach(el => el.classList.remove('selected'));
+  const sel = url
+    ? document.querySelector(`.event-img-opt[data-url="${CSS.escape(url)}"]`)
+    : document.getElementById('event-img-none-opt');
+  if (sel) sel.classList.add('selected');
+}
+
+async function loadEventImagePicker() {
+  const picker = document.getElementById('event-img-picker');
+  if (!picker) return;
+  picker.querySelectorAll('.event-img-opt').forEach(el => el.remove());
+  selectEventImage(null);
+  try {
+    const r = await fetch(`/api/images/list?mode=${_bgMode}`);
+    if (!r.ok) return;
+    const urls = await r.json();
+    urls.forEach(url => {
+      const opt = document.createElement('div');
+      opt.className = 'event-img-opt';
+      opt.dataset.url = url;
+      opt.innerHTML = `<img src="${url}" alt="" />`;
+      opt.onclick = () => selectEventImage(url);
+      picker.appendChild(opt);
+    });
+  } catch(e) {}
+}
+
+function compressImage(file, maxMB = 4) {
+  return new Promise((resolve) => {
+    if (file.size <= maxMB * 1024 * 1024 && file.type === 'image/jpeg') {
+      resolve(file); return;
+    }
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = e => {
+      const img = new Image();
+      img.src = e.target.result;
+      img.onload = () => {
+        const MAX_DIM = 2560;
+        let { width, height } = img;
+        if (width > MAX_DIM || height > MAX_DIM) {
+          const ratio = Math.min(MAX_DIM / width, MAX_DIM / height);
+          width  = Math.round(width  * ratio);
+          height = Math.round(height * ratio);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+
+        let quality = 0.88;
+        const tryEncode = () => {
+          canvas.toBlob(blob => {
+            if (blob.size > maxMB * 1024 * 1024 && quality > 0.25) {
+              quality = Math.round((quality - 0.1) * 100) / 100;
+              tryEncode();
+            } else {
+              resolve(new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' }));
+            }
+          }, 'image/jpeg', quality);
+        };
+        tryEncode();
+      };
+    };
+  });
+}
+
+async function uploadBgFiles(files) {
+  const status      = document.getElementById('bg-upload-status');
+  const bar         = document.getElementById('bg-progress-bar');
+  const text        = document.getElementById('bg-progress-text');
+  const dropContent = document.getElementById('bg-dropzone-content');
+
+  const valid = Array.from(files).filter(f => f.type.startsWith('image/'));
+  if (!valid.length) return;
+
+  dropContent.style.display = 'none';
+  status.style.display = 'block';
+
+  for (let i = 0; i < valid.length; i++) {
+    const file = valid[i];
+
+    text.textContent = `Preparing ${i + 1} of ${valid.length}: ${file.name}`;
+    bar.style.width  = (i / valid.length * 100) + '%';
+    let toUpload;
+    try {
+      toUpload = await compressImage(file);
+    } catch(e) {
+      console.error('Compression failed:', file.name, e);
+      toUpload = file;
+    }
+
+    text.textContent = `Uploading ${i + 1} of ${valid.length}: ${toUpload.name}`;
+    try {
+      const r = await fetch(`/api/images/upload?mode=${_bgMode}&filename=${encodeURIComponent(toUpload.name)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': toUpload.type },
+        body: toUpload,
+      });
+      if (!r.ok) {
+        const err = await r.json().catch(() => ({}));
+        console.error('Upload failed:', file.name, r.status, err);
+      }
+    } catch(e) {
+      console.error('Upload failed:', file.name, e);
+    }
+  }
+
+  bar.style.width  = '100%';
+  text.textContent = valid.length === 1 ? 'Upload complete!' : `${valid.length} images uploaded!`;
+  setTimeout(() => {
+    status.style.display = 'none';
+    dropContent.style.display = '';
+    bar.style.width = '0';
+    loadBgImages();
+  }, 900);
 }
 
 
@@ -364,6 +666,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (cal) cal.style.display = 'none';
   }
 
+  /* ── Resolve mode ── */
+  _bgMode = modeName;
+
   /* ── Fetch facility data ── */
   const [eventsData, stripData, backgroundsData] = await Promise.all([
     fetch(`data/${modeName}/events.json`).then(r => r.json()).catch(() => []),
@@ -396,22 +701,40 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   /* ── Media Carousel ── */
   const carousel = document.getElementById('carousel-container');
-  const playlist = backgroundsData.map(src => ({ type: 'image', src }));
-  let idx = 0, cur = null;
-  function showNextMedia() {
-    const m = playlist[idx];
-    let el;
-    if (m.type === 'video') {
-      el = document.createElement('video'); el.src = m.src; el.autoplay = true; el.muted = true; el.loop = true; el.playsInline = true;
-    } else {
-      el = document.createElement('img'); el.src = m.src; el.alt = '';
-    }
-    el.className = 'media-layer';
+  const pinnedBg = localStorage.getItem('pinned_bg');
+  if (pinnedBg) {
+    const el = document.createElement('img');
+    el.src = pinnedBg; el.alt = ''; el.className = 'media-layer';
     carousel.appendChild(el); void el.offsetWidth; el.classList.add('active');
-    if (cur) { const old = cur; old.classList.remove('active'); setTimeout(() => old.remove(), 1500); }
-    cur = el; idx = (idx + 1) % playlist.length;
+    renderPinnedBadge();
+  } else {
+    let apiImages = [];
+    try {
+      const r = await fetch(`/api/images/list?mode=${modeName}`);
+      if (r.ok) apiImages = await r.json();
+    } catch(e) {}
+    const playlist = [...apiImages, ...backgroundsData].map(src => ({ type: 'image', src }));
+    if (playlist.length) {
+      let idx = 0, cur = null;
+      function showNextMedia() {
+        const m = playlist[idx];
+        let el;
+        if (m.type === 'video') {
+          el = document.createElement('video'); el.src = m.src; el.autoplay = true; el.muted = true; el.loop = true; el.playsInline = true;
+        } else {
+          el = document.createElement('img'); el.src = m.src; el.alt = '';
+        }
+        el.className = 'media-layer';
+        carousel.appendChild(el); void el.offsetWidth; el.classList.add('active');
+        if (cur) { const old = cur; old.classList.remove('active'); setTimeout(() => old.remove(), 1500); }
+        cur = el; idx = (idx + 1) % playlist.length;
+      }
+      showNextMedia(); setInterval(showNextMedia, 8000);
+    }
   }
-  showNextMedia(); setInterval(showNextMedia, 8000);
+
+  /* ── Placed images ── */
+  renderPlacedImages();
 
   /* ── Clock ── */
   function updateTime() {
@@ -551,7 +874,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         dayCustom.forEach(ev => {
           const evEl = document.createElement('div');
           evEl.className = 'cal-event';
-          evEl.textContent = ev.title;
+          if (ev.image) {
+            evEl.innerHTML = `<img class="cal-event-img" src="${ev.image}" alt="${ev.title}"><div>${ev.title}</div>`;
+          } else {
+            evEl.textContent = ev.title;
+          }
           dayEl.appendChild(evEl);
         });
         dayFacility.forEach(ev => {
@@ -578,6 +905,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     weekOffset += e.deltaY > 0 ? 1 : -1;
     renderCalendar();
   }, { passive: false });
+
+  /* ── Background manager drag-and-drop ── */
+  const dropzone  = document.getElementById('bg-dropzone');
+  const fileInput = document.getElementById('bg-file-input');
+  dropzone.addEventListener('dragover',  e => { e.preventDefault(); dropzone.classList.add('drag-over'); });
+  dropzone.addEventListener('dragleave', ()  => dropzone.classList.remove('drag-over'));
+  dropzone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropzone.classList.remove('drag-over');
+    uploadBgFiles(e.dataTransfer.files);
+  });
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files.length) uploadBgFiles(fileInput.files);
+    fileInput.value = '';
+  });
 
   /* Commercial strip */
   renderCommercialStrip(filteredStrip);
